@@ -37,6 +37,21 @@ func connect(count int) {
 	}
 }
 
+func todoHandler(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case "GET":
+		getTodos(w, r)
+	case "POST":
+		postTodo(w, r)
+	case "PUT":
+		updateTodo(w, r)
+	case "DELETE":
+		deleteTodo(w, r)
+	default:
+		w.WriteHeader(405)
+	}
+}
+
 func getTodos(w http.ResponseWriter, r *http.Request) {
 	var todos ToDos
 	result := Db.Find(&todos)
@@ -45,6 +60,28 @@ func getTodos(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	json.NewEncoder(w).Encode(&todos)
+}
+
+func postTodo(w http.ResponseWriter, r *http.Request) {
+	var todo Todo
+	if err := json.NewDecoder(r.Body).Decode(&todo); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	} else {
+		t := &Todo{
+			Name:    todo.Name,
+			Content: todo.Content,
+		}
+		Db.Create(t)
+		json.NewEncoder(w).Encode(t)
+	}
+}
+
+func updateTodo(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func deleteTodo(w http.ResponseWriter, r *http.Request) {
+
 }
 
 func main() {
@@ -68,6 +105,6 @@ func main() {
 		Db.Create(&todos)
 		fmt.Println("create ten todo data!")
 	}
-	http.HandleFunc("/todos", getTodos)
+	http.HandleFunc("/todos", todoHandler)
 	log.Fatal(http.ListenAndServe(":3000", nil))
 }
