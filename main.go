@@ -77,7 +77,13 @@ func postTodo(w http.ResponseWriter, r *http.Request) {
 }
 
 func updateTodo(w http.ResponseWriter, r *http.Request) {
-
+	var todo Todo
+	if err := json.NewDecoder(r.Body).Decode(&todo); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	} else {
+		Db.Model(&todo).Updates(Todo{Name: todo.Name, Content: todo.Content})
+		json.NewEncoder(w).Encode(todo)
+	}
 }
 
 func deleteTodo(w http.ResponseWriter, r *http.Request) {
