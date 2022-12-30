@@ -27,6 +27,7 @@ func getTodos(w http.ResponseWriter, r *http.Request) {
 	var todos models.ToDos
 	result := database.Db.Find(&todos)
 	if err := result.Error; err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		w.WriteHeader(500)
 		return
 	}

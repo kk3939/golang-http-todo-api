@@ -3,6 +3,7 @@ module github.com/kk3939/golang-http-todo-api
 go 1.19
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.5.0
 	gorm.io/driver/mysql v1.4.4
 	gorm.io/gorm v1.24.2
 )
