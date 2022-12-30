@@ -5,7 +5,7 @@ services:
     container_name: golang-http-todo-api-api
     build:
       context: ./
-      dockerfile: ./build/api/Dockerfile
+      dockerfile: ./dockerfiles/api/Dockerfile
     ports:
       - "3000:3000"
     tty: true
@@ -20,7 +20,7 @@ services:
     container_name: golang-http-todo-api-db
     build:
       context: ./
-      dockerfile: ./build/db/Dockerfile
+      dockerfile: ./dockerfiles/db/Dockerfile
     environment:
       MYSQL_ROOT_PASSWORD: root_pass
       MYSQL_PASSWORD: password
