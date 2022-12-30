@@ -4,18 +4,23 @@ services:
     image: api-image
     container_name: golang-http-todo-api-api
     build:
-      context: ../
+      context: ./
       dockerfile: ./build/api/Dockerfile
     ports:
       - "3000:3000"
     tty: true
+    volumes:
+      - .:/app
     depends_on:
       - db
+    command: air -c .air.toml
 
   db:
     image: db-image
     container_name: golang-http-todo-api-db
-    build: ./db
+    build:
+      context: ./
+      dockerfile: ./build/db/Dockerfile
     environment:
       MYSQL_ROOT_PASSWORD: root_pass
       MYSQL_PASSWORD: password
